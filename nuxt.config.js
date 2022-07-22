@@ -28,6 +28,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    './plugins/notifier.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -40,9 +41,22 @@ export default {
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
   ],
+  axios: {
+
+    proxy: true,
+    credentials: true, // this says that in the request the httponly cookie should be sent
+  },
+  proxy: {
+    '/api/': {
+      target: process.env.PROD_API || 'http://localhost:8080', pathRewrite: { '^/api/': '' }
+    }
+  },
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
+    '@nuxtjs/proxy'
   ],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -63,6 +77,52 @@ export default {
       }
     }
   },
+  auth: {
+    strategies: {
+      local: {
+        scheme: 'refresh',
+        url: '/api',
+        token: {
+          property: 'accessToken',
+          maxAge: 60,
+          global: true
+          // type: 'Bearer'
+        },
+        refreshToken: {
+          property: 'refreshToken',
+          data: 'refreshToken',
+          maxAge: 3600 * 30 * 24,
+          required: true,
+        },
+        user: {
+          autoFetch: true,
+          prperty: 'user',
+        },
+        endpoints: {
+          login: { url: '/api/login', method: 'post' },
+          logout: { url: '/api/logout', method: 'post' },
+          refresh: { url: '/api/refresh', method: 'post' },
+          user: { url: '/api/login/me', method: 'get', },
+        },
+        redirect: {
+          login: '/',
+          logout: '/',
+          callback: '/login',
+          home: '/',
+        },
+      },
+      cookie: {
+        prefix: '',
+        options: {
+          path: '/',
+          maxAge: 3600 * 30,
+          sameSite: 'None',
+        },
+      },
+    }
+  },
+
+
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
