@@ -42,7 +42,9 @@ export default {
     },
     async handleYes() {
       const mainImgConfig = { id: this.mainImage, product_id: this.product.id };
-      await this.$axios.put("/api/images/main", mainImgConfig);
+
+      if (this.mainImage !== "")
+        await this.$axios.put("/api/images/main", mainImgConfig);
       this.$emit("close");
     },
     fileChangeHandler() {},
