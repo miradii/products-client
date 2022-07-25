@@ -55,6 +55,11 @@ export default {
       } catch (e) {
         const errors = e.response.data.message;
         if (typeof errors == "string") {
+          if (errors.includes("email")) {
+            this.$refs.email.setErrors(error);
+          } else if (errors.includes("password")) {
+            this.$refs.password.setErrors(errors);
+          }
           console.log(errors);
         } else if (errors !== undefined) {
           errors.forEach((error) => {
