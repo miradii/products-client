@@ -5,4 +5,4 @@ a simple crud website i made for an interview. I used Nuxt spa mode for the fron
 ## Demos
 [Live Demo](https://moart-prod-client.herokuapp.com/)\
 [API Source](https://github.com/miradii/product-api)\
-[API Docs](https://products-api-moart.herokuapp.com/docs)\
+[API Docs](https://products-api-moart.herokuapp.com/docs)
